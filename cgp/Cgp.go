@@ -1,24 +1,17 @@
 package cgp
 
-import "math/rand"
-
 const numberOfOperations = 15
 const maxParameterValue = 256
 
 type Cgp struct {
-	chromosomes         [][]int
 	chromosomeMaxValues []int
 	outputs             int
 	mutationProbability float32
 }
 
-func NewCgp(inputs int, size int, outputs int, numberOfChromosomes int, mutationProbability float32) *Cgp {
+func NewCgp(inputs int, size int, outputs int, mutationProbability float32) *Cgp {
 	var cgp Cgp
-
-	cgp.chromosomes = make([][]int, numberOfChromosomes)
-	for i := 0; i < numberOfChromosomes; i++ {
-		cgp.chromosomes[i] = make([]int, 4*size+outputs)
-	}
+	cgp.chromosomeMaxValues = make([]int, 4*size+outputs)
 
 	for i := 0; i < size; i++ {
 		cgp.chromosomeMaxValues[i*4] = inputs + i
@@ -28,7 +21,7 @@ func NewCgp(inputs int, size int, outputs int, numberOfChromosomes int, mutation
 	}
 
 	outputsOffset := 4 * size
-	for i := 0; i < size; i++ {
+	for i := 0; i < outputs; i++ {
 		cgp.chromosomeMaxValues[outputsOffset+i] = size
 	}
 
@@ -38,58 +31,20 @@ func NewCgp(inputs int, size int, outputs int, numberOfChromosomes int, mutation
 	return &cgp
 }
 
-func (cgp Cgp) Randomize() {
-	numberOfChromosomes := len(cgp.chromosomes)
-	size := len(cgp.chromosomeMaxValues)
-	for i := 0; i < numberOfChromosomes; i++ {
-		for j := 0; j < size; j++ {
-			cgp.chromosomes[i][j] = rand.Intn(cgp.chromosomeMaxValues[j])
-		}
-	}
+func (cgp Cgp) GenerateChromosome() *Chromosome {
+	return GenerateChromosome(&cgp.chromosomeMaxValues)
 }
 
-func (cgp Cgp) GetChromosome(number int) *[]int {
-	size := len(cgp.chromosomeMaxValues) - cgp.outputs
-	chromosome := make([]int, size)
-	for i := 0; i < size; i++ {
-		chromosome[i] = cgp.chromosomes[number][i]
-	}
-
-	return &chromosome
-}
-
-func (cgp Cgp) SetParent(parent []int) {
-	size := len(cgp.chromosomeMaxValues) - cgp.outputs
-	for i := 0; i < size; i++ {
-		cgp.chromosomes[0][i] = parent[i]
-	}
-}
-
-func (cgp Cgp) Mutate() {
-	numberOfChromosomes := len(cgp.chromosomes)
-	size := len(cgp.chromosomeMaxValues) - cgp.outputs
-	for i := 1; i < numberOfChromosomes; i++ {
-		for j := 0; j < size; j++ {
-			if rand.Float32() < cgp.mutationProbability {
-				cgp.chromosomes[i][j] = rand.Intn(cgp.chromosomeMaxValues[j])
-			} else {
-				cgp.chromosomes[i][j] = cgp.chromosomes[0][j]
-			}
-		}
-
-	}
-}
-
-func (cgp Cgp) evaluate(inputs []int, chromosomeNumber int) *[]int {
+func (cgp Cgp) Evaluate(inputs []int, chromosome *Chromosome) *[]int {
 	size := len(cgp.chromosomeMaxValues) - cgp.outputs
 	numberOfInputs := len(inputs)
 
 	values := make([]int, size)
 	for i := 0; i < size; i++ {
-		leftOperandAddress := cgp.chromosomes[chromosomeNumber][4*i]
-		rightOperandAddress := cgp.chromosomes[chromosomeNumber][4*i+1]
-		functionNumber := cgp.chromosomes[chromosomeNumber][4*i+2]
-		parameter := cgp.chromosomes[chromosomeNumber][4*i+3]
+		leftOperandAddress := (*chromosome)[4*i]
+		rightOperandAddress := (*chromosome)[4*i+1]
+		functionNumber := (*chromosome)[4*i+2]
+		parameter := (*chromosome)[4*i+3]
 
 		var leftOperand int
 		var rightOperand int
@@ -109,7 +64,7 @@ func (cgp Cgp) evaluate(inputs []int, chromosomeNumber int) *[]int {
 
 	outputs := make([]int, cgp.outputs)
 	for i := 0; i < cgp.outputs; i++ {
-		outputs[i] = values[cgp.chromosomes[chromosomeNumber][4*size+i]]
+		outputs[i] = values[(*chromosome)[4*size+i]]
 	}
 
 	return &outputs

@@ -6,12 +6,25 @@ import (
 	"image/color"
 	"image/png"
 	"net/http"
+
+	"github.com/jiripetrlik/evo-art/cgp"
 )
+
+type ModelType struct {
+	Chromosomes []string
+}
+
+var cgpModel = cgp.NewCgp(2, 25, 3, 0.05)
 
 func choiceEndpoint(writer http.ResponseWriter, request *http.Request) {
 	writer.Header().Set("Content-Type", "text/html")
 
-	model := make(map[string]string)
+	var model ModelType
+	model.Chromosomes = make([]string, 4)
+	for i := 0; i < 4; i++ {
+		chromosome := cgpModel.GenerateChromosome()
+		model.Chromosomes[i] = chromosome.ToString()
+	}
 
 	tmpl, err := template.New("choice").Parse(choicePageTemplate)
 	if err != nil {
