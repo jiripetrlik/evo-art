@@ -11,12 +11,28 @@ const choicePageTemplate string = `
 		<h1>EVO ART</h1>
 		<table class="choice_table">
 			<tr>
-				<td><img src="image.png?chromosome={{index .Chromosomes 1 }}"></td>
-				<td><img src="image.png?chromosome={{index .Chromosomes 1}}"></td>
+				<td>
+					<a href="?chromosome={{index .Chromosomes 0}}">
+						<img src="image.png?chromosome={{index .Chromosomes 0}}">
+					</a>
+				</td>
+				<td>
+					<a href="?chromosome={{index .Chromosomes 1}}">
+						<img src="image.png?chromosome={{index .Chromosomes 1}}">
+					</a>
+				</td>
 			</tr>
 			<tr>
-				<td><img src="image.png?chromosome={{index .Chromosomes 2}}"></td>
-				<td><img src="image.png?chromosome={{index .Chromosomes 3}}"></td>
+				<td>
+					<a href="?chromosome={{index .Chromosomes 2}}">
+						<img src="image.png?chromosome={{index .Chromosomes 2}}">
+					</a>
+				</td>
+				<td>
+					<a href="?chromosome={{index .Chromosomes 3}}">
+						<img src="image.png?chromosome={{index .Chromosomes 3}}">
+					</a>
+				</td>
 			</tr>
 		</table>
 	</body>
