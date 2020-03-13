@@ -35,11 +35,16 @@ const choicePageTemplate string = `
 				</td>
 			</tr>
 		</table>
+		<a href="/">RESET</a>
 	</body>
 </html>
 `
 
 const css = `
+body {
+	text-align: center;
+}
+
 h1 {
 	text-align: center;
 }
