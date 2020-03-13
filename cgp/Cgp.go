@@ -35,8 +35,12 @@ func (cgp Cgp) GenerateChromosome() *Chromosome {
 	return GenerateChromosome(&cgp.chromosomeMaxValues)
 }
 
+func (cgp Cgp) MutateChromosome(chromosome *Chromosome) *Chromosome {
+	return chromosome.Mutate(&cgp.chromosomeMaxValues, cgp.mutationProbability)
+}
+
 func (cgp Cgp) Evaluate(inputs []int, chromosome *Chromosome) *[]int {
-	size := len(cgp.chromosomeMaxValues) - cgp.outputs
+	size := (len(cgp.chromosomeMaxValues) - cgp.outputs) / 4
 	numberOfInputs := len(inputs)
 
 	values := make([]int, size)

@@ -14,16 +14,28 @@ type ModelType struct {
 	Chromosomes []string
 }
 
-var cgpModel = cgp.NewCgp(2, 25, 3, 0.05)
+var cgpModel = cgp.NewCgp(2, 25, 3, 0.2)
 
 func choiceEndpoint(writer http.ResponseWriter, request *http.Request) {
 	writer.Header().Set("Content-Type", "text/html")
 
 	var model ModelType
 	model.Chromosomes = make([]string, 4)
-	for i := 0; i < 4; i++ {
-		chromosome := cgpModel.GenerateChromosome()
-		model.Chromosomes[i] = chromosome.ToString()
+
+	chromosomeParam, found := request.URL.Query()["chromosome"]
+	if found == true {
+		chromosome := cgp.LoadChromosome(chromosomeParam[0])
+		model.Chromosomes[0] = chromosome.ToString()
+
+		for i := 1; i < 4; i++ {
+			childChromosome := cgpModel.MutateChromosome(chromosome)
+			model.Chromosomes[i] = childChromosome.ToString()
+		}
+	} else {
+		for i := 0; i < 4; i++ {
+			chromosome := cgpModel.GenerateChromosome()
+			model.Chromosomes[i] = chromosome.ToString()
+		}
 	}
 
 	tmpl, err := template.New("choice").Parse(choicePageTemplate)
@@ -44,12 +56,22 @@ func imageEndpoint(writer http.ResponseWriter, request *http.Request) {
 
 	const width = 256
 	const height = 256
+	chromosomeParam, found := request.URL.Query()["chromosome"]
+	if !found {
+		writer.WriteHeader(http.StatusInternalServerError)
+		writer.Write([]byte("500 - query parameter 'chromosome' is missing"))
+	}
 
+	chromosome := cgp.LoadChromosome(chromosomeParam[0])
 	r := image.Rect(0, 0, width, height)
 	img := image.NewRGBA(r)
-	c := color.RGBA{0, 0, 255, 255}
 	for x := 0; x < width; x++ {
 		for y := 0; y < height; y++ {
+			inputs := []int{x, y}
+			outputs := cgpModel.Evaluate(inputs, chromosome)
+
+			c := color.RGBA{uint8((*outputs)[0]), uint8((*outputs)[1]),
+				uint8((*outputs)[2]), 255}
 			img.SetRGBA(x, y, c)
 		}
 	}

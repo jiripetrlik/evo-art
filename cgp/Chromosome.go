@@ -20,7 +20,7 @@ func GenerateChromosome(maxValues *[]int) *Chromosome {
 }
 
 func LoadChromosome(str string) *Chromosome {
-	genes := strings.Split(str, ",")
+	genes := strings.Split(str, "-")
 	size := len(genes)
 	chromosome := make([]int, size)
 	for index, gene := range genes {
