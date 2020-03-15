@@ -7,6 +7,8 @@ This application is inspired by
 [Evolutionary Art with Cartesian Genetic Programming](https://www.researchgate.net/profile/Julian_Miller/publication/230855629_Evolutionary_Art_with_Cartesian_Genetic_Programming/links/0046352c2d562bba54000000.pdf)
 paper.
 
+![screenshot](docs/screenshot.png)
+
 ## Build and run the application
 
 Evo Art is written in Go language.
