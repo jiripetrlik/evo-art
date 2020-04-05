@@ -46,7 +46,7 @@ func evaluateFunction(leftOperand int, rightOperand int, functionNumber int, par
 			return 255 * ((leftOperand + 1) / (rightOperand + 1))
 		}
 	case 14:
-		return int(math.Sqrt(math.Pow(float64(leftOperand), 2)+math.Pow(float64(rightOperand), 2)-2*math.Pow(float64(parameter), 2))) % 255
+		return int(math.Sqrt(math.Abs(math.Pow(float64(leftOperand), 2)+math.Pow(float64(rightOperand), 2)-2*math.Pow(float64(parameter), 2)))) % 255
 	}
 
 	return 0
