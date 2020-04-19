@@ -8,6 +8,7 @@ import (
 	"net/http"
 
 	"github.com/jiripetrlik/evo-art/cgp"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 type ModelType struct {
@@ -82,6 +83,8 @@ func GuiServer() {
 	http.HandleFunc("/", choiceEndpoint)
 	http.HandleFunc("/style.css", cssEndpoint)
 	http.HandleFunc("/image.png", imageEndpoint)
+
+	http.Handle("/metrics", promhttp.Handler())
 
 	http.ListenAndServe(":8080", nil)
 }
