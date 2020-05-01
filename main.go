@@ -1,7 +1,13 @@
 package main
 
-import "github.com/jiripetrlik/evo-art/gui"
+import (
+	"math/rand"
+	"time"
+
+	"github.com/jiripetrlik/evo-art/gui"
+)
 
 func main() {
+	rand.Seed(time.Now().UTC().UnixNano())
 	gui.GuiServer()
 }
