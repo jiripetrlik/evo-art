@@ -13,7 +13,7 @@ paper.
 
 Download the binary file for your computer architecture and operating system from
 the latest [release page](https://github.com/jiripetrlik/evo-art/releases).
-Run the downloaded file. Open the application using a web browser on [http://localhost:8080].
+Run the downloaded file. Open the application using a web browser on [http://localhost:8080](http://localhost:8080).
 
 ## Build and run the application
 
@@ -21,7 +21,7 @@ Evo Art is written in Go language.
 Use `go build` command to compile the application.
 It will create `evo-art` binary file. To run the
 application simply run `./evo-art` binary. It
-will expose web interface on `http://localhost:8080`.
+will expose web interface on [http://localhost:8080](http://localhost:8080).
 
 ## Run using Docker
 
