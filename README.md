@@ -9,6 +9,12 @@ paper.
 
 ![screenshot](docs/screenshot.png)
 
+## Run using published binaries
+
+Download the binary file for your computer architecture and operating system from
+the latest [release page](https://github.com/jiripetrlik/evo-art/releases).
+Run the downloaded file. Open the application using a web browser on [http://localhost:8080].
+
 ## Build and run the application
 
 Evo Art is written in Go language.
